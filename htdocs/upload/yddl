@@ -1,0 +1,77 @@
+# this script will take the url and get the sorce code. 
+# then grep it for the video link
+# and then fire up perl script for downloading it
+
+cd /Applications/MAMP/htdocs/upload
+
+if [ -f lyrics.mp4 ]; then
+rm lyrics.mp4
+fi
+
+if [ -f ../temp.wav ]; then
+rm ../temp.wav
+fi
+
+if [ -f 1.mp3 ]; then
+rm 1.mp3
+fi
+
+if [ -f 1.wav ]; then
+rm 1.wav
+fi
+
+if [ -f out.wav ]; then
+rm out.wav
+fi
+
+
+search=""
+for i in $@:
+do
+search=$search+$i
+done
+
+url="http://youtube.com/results?search_query="$search
+
+
+(curl -L $url) | tr [" "] ["\n"] > test1.txt
+
+grep "/watch" test1.txt | head -1 | tr ["\""] ["\n"]  > output.txt
+var=$(sed -n 2p < output.txt)
+
+ans="www.youtube.com"$var
+
+
+/usr/local/bin/youtube-dl $ans -f 18 -o vid.mp4
+
+
+rm output.txt
+rm test1.txt
+
+fname=$(ls | tr [" "] ["\n"] | grep ".mp4")
+
+if [ -f "1.mp3" ]; then
+	rm 1.mp3
+fi
+
+ffmpeg -i $fname -f mp3 -ab 320000 -ac 2 -ar 44100 -acodec mp3 -vn 1.mp3
+
+./script
+
+/Users/akshayaggarwal/Desktop/HackU/sox-14.4.1/sox 1.mp3 1.wav remix 1,2
+
+rm vid.mp4
+search=$search"+lyrics"
+
+url="http://youtube.com/results?search_query="$search
+
+(curl -L $url) | tr [" "] ["\n"] > test1.txt
+
+grep "/watch" test1.txt | head -1 | tr ["\""] ["\n"]  > output.txt
+var=$(sed -n 2p < output.txt)
+ans="www.youtube.com"$var
+
+/usr/local/bin/youtube-dl $ans -f 18 -o lyrics.mp4
+
+rm output.txt
+rm test1.txt

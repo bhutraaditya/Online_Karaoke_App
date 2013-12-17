@@ -1,0 +1,24 @@
+#!/bin/bash
+cd /Applications/MAMP/htdocs
+
+#/Users/akshayaggarwal/Desktop/HackU/sox-14.4.1/sox temp.wav temp2.wav gain -n -b 16 rate #44100 >/dev/null 2>&1 
+#
+#rm temp.wav
+#mv temp2.wav temp.wav
+#
+#/Users/akshayaggarwal/Desktop/HackU/sox-14.4.1/sox upload/1.wav upload/2.wav gain -n -b #16 rate 44100 >/dev/null 2>&1
+#
+#rm upload/1.wav
+#mv upload/2.wav upload/1.wav
+
+
+
+/usr/local/bin/aubiopitch -t --threshold=0 upload/1.wav > upload/in1.txt
+/usr/local/bin/aubiopitch -t --threshold=0 temp.wav > upload/in2.txt
+
+cd upload
+./a.out
+cd ..
+
+rm upload/in1.txt
+rm upload/in2.txt

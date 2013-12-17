@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd /Applications/MAMP/htdocs/upload
+file=`ls | grep 1` 
+if [ -f out.wav ]; then
+	rm out.wav
+fi
+
+/Users/akshayaggarwal/Desktop/HackU/sox-14.4.1/sox $file out.wav remix 1,2i
